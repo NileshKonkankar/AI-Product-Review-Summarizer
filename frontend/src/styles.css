@@ -1,0 +1,168 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    font-family:
+      Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    letter-spacing: 0;
+  }
+
+  button,
+  input,
+  textarea {
+    font: inherit;
+    letter-spacing: 0;
+  }
+}
+
+@layer components {
+  .app-header {
+    @apply flex flex-col gap-4 border-b border-line pb-5 lg:flex-row lg:items-end lg:justify-between;
+  }
+
+  .eyebrow {
+    @apply text-sm font-semibold uppercase text-teal;
+  }
+
+  .status-strip {
+    @apply flex w-fit flex-wrap items-center gap-2 rounded-md border border-line bg-white px-3 py-2 text-sm text-ink/70 shadow-panel;
+  }
+
+  .status-dot {
+    @apply h-2.5 w-2.5 rounded-full bg-coral;
+  }
+
+  .status-dot.is-live {
+    @apply bg-leaf;
+  }
+
+  .divider {
+    @apply h-4 w-px bg-line;
+  }
+
+  .tool-panel,
+  .result-panel,
+  .empty-panel,
+  .history-panel {
+    @apply rounded-lg border border-line bg-white p-4 shadow-panel sm:p-5;
+  }
+
+  .image-strip {
+    @apply mb-5 grid grid-cols-[88px_minmax(0,1fr)] items-center gap-3 rounded-lg border border-line bg-paper p-2;
+  }
+
+  .image-strip img {
+    @apply h-20 w-[88px] rounded-md object-cover;
+  }
+
+  .field-label {
+    @apply mb-2 mt-4 block text-sm font-semibold text-ink;
+  }
+
+  .field-input {
+    @apply min-h-11 w-full rounded-md border border-line bg-white px-3 py-2 text-ink outline-none transition focus:border-teal focus:ring-2 focus:ring-teal/20;
+  }
+
+  .review-box {
+    @apply mt-3 h-72 w-full resize-y rounded-md border border-line bg-white px-3 py-3 text-sm leading-6 text-ink outline-none transition focus:border-teal focus:ring-2 focus:ring-teal/20;
+  }
+
+  .file-button,
+  .secondary-button,
+  .primary-button {
+    @apply inline-flex min-h-10 cursor-pointer items-center justify-center rounded-md px-4 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .file-button {
+    @apply border border-line bg-paper text-ink hover:border-teal;
+  }
+
+  .file-button input {
+    @apply hidden;
+  }
+
+  .primary-button {
+    @apply bg-teal text-white hover:bg-teal/90;
+  }
+
+  .secondary-button {
+    @apply border border-line bg-white text-ink hover:border-teal;
+  }
+
+  .error-box {
+    @apply mt-4 rounded-md border border-coral/30 bg-coral/10 px-3 py-2 text-sm text-ink;
+  }
+
+  .empty-panel {
+    @apply min-h-72 content-center;
+  }
+
+  .summary-box {
+    @apply my-5 rounded-lg border-l-4 border-teal bg-paper p-4 leading-7 text-ink/80;
+  }
+
+  .metric-tile,
+  .sentiment-box,
+  .insight-list,
+  .recommendation-box {
+    @apply rounded-lg border border-line bg-white p-4;
+  }
+
+  .sentiment-box {
+    @apply my-4;
+  }
+
+  .bar-track {
+    @apply h-3 overflow-hidden rounded-md bg-paper;
+  }
+
+  .bar-fill {
+    @apply block h-full rounded-md;
+  }
+
+  .marker-positive,
+  .marker-negative,
+  .marker-neutral {
+    @apply mt-2 h-2 w-2 shrink-0 rounded-full;
+  }
+
+  .marker-positive {
+    @apply bg-leaf;
+  }
+
+  .marker-negative {
+    @apply bg-coral;
+  }
+
+  .marker-neutral {
+    @apply bg-teal;
+  }
+
+  .recommendation-box {
+    @apply my-4 border-teal/40 bg-teal/5;
+  }
+
+  .history-panel {
+    @apply shadow-none;
+  }
+
+  .history-item {
+    @apply grid min-h-16 w-full gap-1 rounded-md border border-line bg-white px-3 py-3 text-left transition hover:border-teal hover:bg-paper;
+  }
+
+  .history-item.is-active {
+    @apply border-teal bg-teal/5;
+  }
+
+  .skeleton {
+    @apply animate-pulse rounded-md bg-line;
+  }
+}
