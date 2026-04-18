@@ -1,6 +1,9 @@
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
+import helmet from "helmet";
+import mongoSanitize from "express-mongo-sanitize";
+import rateLimit from "express-rate-limit";
 import { connectDb, getDbStatus } from "./config/db.js";
 import analysisRoutes from "./routes/analysisRoutes.js";
 
@@ -28,7 +31,18 @@ app.use(
   })
 );
 
+app.use(helmet());
+app.use(mongoSanitize());
 app.use(express.json({ limit: "4mb" }));
+
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 50, // Limit each IP to 50 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: "Too many requests from this IP, please try again after 15 minutes" }
+});
+app.use("/api", apiLimiter);
 
 app.get("/health", (_req, res) => {
   res.json({

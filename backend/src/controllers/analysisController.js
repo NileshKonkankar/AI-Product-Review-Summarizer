@@ -17,8 +17,8 @@ function toClientRecord(record) {
 
 export async function analyzeReviews(req, res, next) {
   try {
-    const productName = (req.body.productName || "Untitled product").trim();
-    const sourceUrl = (req.body.sourceUrl || "").trim();
+    const productName = String(req.body.productName || "Untitled product").trim();
+    const sourceUrl = String(req.body.sourceUrl || "").trim();
     const reviews = normalizeReviews({
       reviews: req.body.reviews,
       reviewsText: req.body.reviewsText
