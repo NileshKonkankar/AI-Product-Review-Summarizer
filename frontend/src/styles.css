@@ -11,33 +11,41 @@
     margin: 0;
     min-width: 320px;
     font-family:
-      Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    letter-spacing: 0;
+      "Space Grotesk", Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+    letter-spacing: -0.02em;
+    background-color: theme('colors.paper');
+    color: theme('colors.ink');
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: -0.05em;
   }
 
   button,
   input,
   textarea {
     font: inherit;
-    letter-spacing: 0;
+    letter-spacing: inherit;
   }
 }
 
 @layer components {
   .app-header {
-    @apply flex flex-col gap-4 border-b border-line pb-5 lg:flex-row lg:items-end lg:justify-between;
+    @apply flex flex-col gap-4 border-b-8 border-line pb-8 pt-8 lg:flex-row lg:items-end lg:justify-between;
   }
 
   .eyebrow {
-    @apply text-sm font-semibold uppercase text-teal;
+    @apply text-sm font-black uppercase text-teal tracking-widest;
   }
 
   .status-strip {
-    @apply flex w-fit flex-wrap items-center gap-2 rounded-md border border-line bg-white px-3 py-2 text-sm text-ink/70 shadow-panel;
+    @apply flex w-fit flex-wrap items-center gap-4 border-4 border-line bg-paper px-4 py-2 text-xs font-black uppercase tracking-widest text-ink shadow-panel;
   }
 
   .status-dot {
-    @apply h-2.5 w-2.5 rounded-full bg-coral;
+    @apply h-3 w-3 bg-coral;
   }
 
   .status-dot.is-live {
@@ -45,44 +53,40 @@
   }
 
   .divider {
-    @apply h-4 w-px bg-line;
+    @apply h-4 w-1 bg-line;
   }
 
   .tool-panel,
   .result-panel,
   .empty-panel,
   .history-panel {
-    @apply rounded-lg border border-line bg-white p-4 shadow-panel sm:p-5;
+    @apply border-4 border-line bg-paper p-6 sm:p-8 shadow-panel transition-all duration-300;
   }
 
   .image-strip {
-    @apply mb-5 grid grid-cols-[88px_minmax(0,1fr)] items-center gap-3 rounded-lg border border-line bg-paper p-2;
-  }
-
-  .image-strip img {
-    @apply h-20 w-[88px] rounded-md object-cover;
+    @apply hidden; /* Hide the generic image strip for brutalist look */
   }
 
   .field-label {
-    @apply mb-2 mt-4 block text-sm font-semibold text-ink;
+    @apply mb-2 mt-6 block text-sm font-black uppercase tracking-wider text-ink;
   }
 
   .field-input {
-    @apply min-h-11 w-full rounded-md border border-line bg-white px-3 py-2 text-ink outline-none transition focus:border-teal focus:ring-2 focus:ring-teal/20;
+    @apply min-h-14 w-full border-4 border-line bg-paper px-4 py-3 text-xl font-bold text-ink outline-none transition-all focus:border-teal focus:shadow-panel;
   }
 
   .review-box {
-    @apply mt-3 h-72 w-full resize-y rounded-md border border-line bg-white px-3 py-3 text-sm leading-6 text-ink outline-none transition focus:border-teal focus:ring-2 focus:ring-teal/20;
+    @apply mt-4 h-64 w-full resize-y border-4 border-line bg-paper px-4 py-4 text-base font-medium leading-relaxed text-ink outline-none transition-all focus:border-teal focus:shadow-panel;
   }
 
   .file-button,
   .secondary-button,
   .primary-button {
-    @apply inline-flex min-h-10 cursor-pointer items-center justify-center rounded-md px-4 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex min-h-14 cursor-pointer items-center justify-center border-4 px-8 py-3 text-sm font-black uppercase tracking-widest transition-all hover:-translate-y-1 hover:shadow-panel active:translate-y-0 active:shadow-none disabled:pointer-events-none disabled:opacity-50;
   }
 
   .file-button {
-    @apply border border-line bg-paper text-ink hover:border-teal;
+    @apply border-line bg-paper text-ink hover:border-teal;
   }
 
   .file-button input {
@@ -90,48 +94,48 @@
   }
 
   .primary-button {
-    @apply bg-teal text-white hover:bg-teal/90;
+    @apply border-teal bg-teal text-paper hover:bg-ink hover:border-ink hover:text-paper;
   }
 
   .secondary-button {
-    @apply border border-line bg-white text-ink hover:border-teal;
+    @apply border-ink bg-paper text-ink hover:bg-ink hover:text-paper;
   }
 
   .error-box {
-    @apply mt-4 rounded-md border border-coral/30 bg-coral/10 px-3 py-2 text-sm text-ink;
+    @apply mt-6 border-4 border-coral bg-coral/10 px-4 py-4 text-base font-bold text-coral;
   }
 
   .empty-panel {
-    @apply min-h-72 content-center;
+    @apply min-h-[500px] content-center border-dashed;
   }
 
   .summary-box {
-    @apply my-5 rounded-lg border-l-4 border-teal bg-paper p-4 leading-7 text-ink/80;
+    @apply my-8 border-l-8 border-teal bg-line/20 p-6 text-xl font-medium leading-relaxed text-ink;
   }
 
   .metric-tile,
   .sentiment-box,
   .insight-list,
   .recommendation-box {
-    @apply rounded-lg border border-line bg-white p-4;
+    @apply border-4 border-line bg-paper p-6 transition-transform duration-300 hover:-translate-y-1 hover:border-teal;
   }
 
   .sentiment-box {
-    @apply my-4;
+    @apply my-8;
   }
 
   .bar-track {
-    @apply h-3 overflow-hidden rounded-md bg-paper;
+    @apply h-6 w-full border-2 border-line bg-paper overflow-hidden;
   }
 
   .bar-fill {
-    @apply block h-full rounded-md;
+    @apply block h-full bg-teal transition-all duration-1000 ease-out;
   }
 
   .marker-positive,
   .marker-negative,
   .marker-neutral {
-    @apply mt-2 h-2 w-2 shrink-0 rounded-full;
+    @apply mt-1.5 h-4 w-4 shrink-0 border-2 border-ink;
   }
 
   .marker-positive {
@@ -143,26 +147,49 @@
   }
 
   .marker-neutral {
-    @apply bg-teal;
+    @apply bg-honey;
   }
 
   .recommendation-box {
-    @apply my-4 border-teal/40 bg-teal/5;
+    @apply my-8 border-teal bg-teal/10 p-8;
   }
 
   .history-panel {
-    @apply shadow-none;
+    @apply border-none shadow-none p-0 bg-transparent;
   }
 
   .history-item {
-    @apply grid min-h-16 w-full gap-1 rounded-md border border-line bg-white px-3 py-3 text-left transition hover:border-teal hover:bg-paper;
+    @apply grid min-h-16 w-full gap-2 border-4 border-line bg-paper px-4 py-4 text-left transition-all hover:-translate-x-2 hover:border-teal hover:shadow-[8px_8px_0px_0px_rgba(255,69,0,1)];
   }
 
   .history-item.is-active {
-    @apply border-teal bg-teal/5;
+    @apply -translate-x-2 border-teal shadow-panel bg-teal/10;
   }
 
   .skeleton {
-    @apply animate-pulse rounded-md bg-line;
+    @apply animate-pulse bg-line border-4 border-line;
   }
+
+  /* Animations */
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slide-in {
+    opacity: 0;
+    animation: slideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .stagger-1 { animation-delay: 100ms; }
+  .stagger-2 { animation-delay: 200ms; }
+  .stagger-3 { animation-delay: 300ms; }
+  .stagger-4 { animation-delay: 400ms; }
+  .stagger-5 { animation-delay: 500ms; }
 }

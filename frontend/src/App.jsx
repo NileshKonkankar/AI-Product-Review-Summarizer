@@ -127,102 +127,100 @@ function App() {
   }
 
   return (
-    <main className="min-h-screen bg-paper text-ink">
-      <section className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-5 sm:px-6 lg:px-8">
-        <header className="app-header">
+    <main className="min-h-screen bg-paper text-ink p-4 sm:p-8 md:p-12">
+      <div className="mx-auto max-w-[1600px]">
+        <header className="app-header animate-slide-in stagger-1">
           <div>
-            <p className="eyebrow">AI Product Review Summarizer</p>
-            <h1 className="mt-2 max-w-3xl text-3xl font-semibold leading-tight sm:text-4xl">
-              Turn messy customer reviews into a clear buying decision.
+            <p className="eyebrow text-xl">AI Product Review Summarizer</p>
+            <h1 className="mt-4 text-4xl font-black uppercase tracking-tighter sm:text-6xl lg:text-7xl max-w-4xl">
+              Turn messy reviews into a hard buying decision.
             </h1>
           </div>
           <div className="status-strip" aria-label="Service status">
             <span className={health?.status === "ok" ? "status-dot is-live" : "status-dot"} />
-            <span>{health?.status === "ok" ? "API connected" : "API status unknown"}</span>
+            <span>{health?.status === "ok" ? "API LIVE" : "API OFFLINE"}</span>
             <span className="divider" />
-            <span>{health?.database === "connected" ? "MongoDB on" : "Demo history"}</span>
+            <span>{health?.database === "connected" ? "DB ACTIVE" : "DB OFFLINE"}</span>
           </div>
         </header>
 
-        <div className="grid gap-5 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
-          <form className="tool-panel" onSubmit={handleSubmit}>
-            <div className="image-strip">
-              <img
-                src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=80"
-                alt="Customer purchase decisions"
+        <div className={`mt-12 grid gap-8 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${result ? "lg:grid-cols-[400px_minmax(0,1fr)]" : "max-w-4xl mx-auto"}`}>
+          <div className="flex flex-col gap-8 animate-slide-in stagger-2">
+            <form className="tool-panel" onSubmit={handleSubmit}>
+              <h2 className="text-3xl font-black uppercase tracking-tighter border-b-4 border-line pb-4 mb-6">
+                Command Center
+              </h2>
+
+              <label className="field-label" htmlFor="productName">
+                Product name
+              </label>
+              <input
+                id="productName"
+                className="field-input"
+                value={productName}
+                onChange={(event) => setProductName(event.target.value)}
+                placeholder="NOISE-CANCELLING HEADPHONES"
               />
-              <div>
-                <p className="text-sm font-semibold text-ink">Review workspace</p>
-                <p className="text-sm text-ink/70">
-                  Paste reviews, load a text or CSV file, then generate a structured readout.
-                </p>
+
+              <label className="field-label" htmlFor="sourceUrl">
+                Source URL
+                <span className="ml-2 font-bold text-coral">REQUIRED</span>
+              </label>
+              <input
+                id="sourceUrl"
+                className="field-input"
+                type="url"
+                required
+                value={sourceUrl}
+                onChange={(event) => setSourceUrl(event.target.value)}
+                placeholder="HTTPS://STORE.EXAMPLE/PRODUCT"
+              />
+
+              <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
+                <label className="field-label m-0" htmlFor="reviewsText">
+                  Raw Reviews
+                </label>
+                <label className="file-button">
+                  Upload .TXT / .CSV
+                  <input type="file" accept=".txt,.csv,text/plain,text/csv" onChange={handleFileUpload} />
+                </label>
               </div>
-            </div>
 
-            <label className="field-label" htmlFor="productName">
-              Product name
-            </label>
-            <input
-              id="productName"
-              className="field-input"
-              value={productName}
-              onChange={(event) => setProductName(event.target.value)}
-              placeholder="Example: Noise-cancelling headphones"
-            />
+              {fileName ? <p className="mt-3 text-sm font-bold text-ink/60 uppercase tracking-widest">LOADED: {fileName}</p> : null}
 
-            <label className="field-label" htmlFor="sourceUrl">
-              Source URL
-              <span className="ml-2 font-normal text-ink/50">optional</span>
-            </label>
-            <input
-              id="sourceUrl"
-              className="field-input"
-              value={sourceUrl}
-              onChange={(event) => setSourceUrl(event.target.value)}
-              placeholder="https://store.example/product"
-            />
+              <textarea
+                id="reviewsText"
+                className="review-box"
+                value={reviewsText}
+                onChange={(event) => setReviewsText(event.target.value)}
+                placeholder="PASTE REVIEWS HERE..."
+              />
 
-            <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-              <label className="field-label m-0" htmlFor="reviewsText">
-                Reviews
-              </label>
-              <label className="file-button">
-                Upload TXT or CSV
-                <input type="file" accept=".txt,.csv,text/plain,text/csv" onChange={handleFileUpload} />
-              </label>
-            </div>
+              <div className="mt-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t-4 border-line pt-6">
+                <p className="text-lg font-black uppercase tracking-widest">{reviewCount} REVIEW{reviewCount === 1 ? "" : "S"}</p>
+                <button className="primary-button text-lg" type="submit" disabled={loading}>
+                  {loading ? "ANALYZING..." : "ANALYZE NOW"}
+                </button>
+              </div>
 
-            {fileName ? <p className="mt-2 text-sm text-ink/60">Loaded {fileName}</p> : null}
+              {error ? <p className="error-box">{error}</p> : null}
+            </form>
 
-            <textarea
-              id="reviewsText"
-              className="review-box"
-              value={reviewsText}
-              onChange={(event) => setReviewsText(event.target.value)}
-              placeholder="Paste each review on a new line, or separate longer reviews with blank lines."
-            />
-
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className="text-sm text-ink/65">{reviewCount} review{reviewCount === 1 ? "" : "s"} detected</p>
-              <button className="primary-button" type="submit" disabled={loading}>
-                {loading ? "Analyzing..." : "Analyze reviews"}
-              </button>
-            </div>
-
-            {error ? <p className="error-box">{error}</p> : null}
-          </form>
-
-          <section className="flex min-w-0 flex-col gap-5">
-            <AnalysisResult result={result} onExport={exportResult} loading={loading} />
             <HistoryPanel
               records={history}
               activeId={result?.id}
               loadingId={historyLoadingId}
               onOpen={openHistoryItem}
             />
-          </section>
+          </div>
+
+          {(result || loading) && (
+            <div className="animate-slide-in stagger-3">
+              <AnalysisResult result={result} onExport={exportResult} loading={loading} />
+            </div>
+          )}
         </div>
-      </section>
+      </div>
     </main>
   );
 }
@@ -230,113 +228,113 @@ function App() {
 function AnalysisResult({ result, onExport, loading }) {
   if (loading) {
     return (
-      <section className="result-panel">
-        <div className="skeleton h-5 w-40" />
-        <div className="skeleton h-24 w-full" />
-        <div className="grid gap-3 sm:grid-cols-3">
-          <div className="skeleton h-24" />
-          <div className="skeleton h-24" />
-          <div className="skeleton h-24" />
+      <section className="result-panel flex flex-col gap-8 h-full min-h-[600px]">
+        <div className="skeleton h-16 w-3/4" />
+        <div className="skeleton h-8 w-1/2" />
+        <div className="skeleton h-64 w-full" />
+        <div className="grid gap-6 sm:grid-cols-3">
+          <div className="skeleton h-32" />
+          <div className="skeleton h-32" />
+          <div className="skeleton h-32" />
         </div>
       </section>
     );
   }
 
-  if (!result) {
-    return (
-      <section className="empty-panel">
-        <p className="eyebrow">Ready</p>
-        <h2 className="mt-2 text-2xl font-semibold">Your summary will land here.</h2>
-        <p className="mt-3 text-ink/70">
-          Run the sample set or paste your own reviews to see sentiment, recurring pros and cons,
-          suspicious-review signals, and a final buy recommendation.
-        </p>
-      </section>
-    );
-  }
+  if (!result) return null;
 
   return (
-    <section className="result-panel">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <p className="eyebrow">{result.provider || "local"} analysis</p>
-          <h2 className="mt-2 text-2xl font-semibold">{result.productName}</h2>
-          <p className="mt-1 text-sm text-ink/60">
-            {result.reviewCount} reviews analyzed - {formatDate(result.createdAt)}
+    <section className="result-panel flex flex-col gap-8 h-full">
+      <div className="flex flex-col gap-4 border-b-8 border-line pb-8 animate-slide-in stagger-1">
+        <p className="eyebrow text-xl">{result.provider || "local"} analysis</p>
+        <h2 className="text-5xl sm:text-6xl lg:text-8xl font-black uppercase tracking-tighter leading-[0.9] break-words">
+          {result.productName}
+        </h2>
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mt-6">
+          <p className="text-xl font-bold text-ink/60 uppercase tracking-widest">
+            {result.reviewCount} REVIEWS &mdash; {formatDate(result.createdAt)}
           </p>
+          <button className="secondary-button" type="button" onClick={onExport}>
+            Export RAW
+          </button>
         </div>
-        <button className="secondary-button" type="button" onClick={onExport}>
-          Export text
-        </button>
       </div>
 
-      <p className="summary-box">{result.summary}</p>
+      <p className="summary-box text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tighter leading-tight animate-slide-in stagger-2">
+        {result.summary}
+      </p>
 
-      <div className="grid gap-3 sm:grid-cols-3">
-        <MetricTile label="Sentiment" value={`${result.sentiment.score}/100`} detail={result.sentiment.label} />
+      <div className="grid gap-6 sm:grid-cols-3 animate-slide-in stagger-3">
+        <MetricTile label="Sentiment Score" value={`${result.sentiment.score}`} detail={result.sentiment.label} />
         <MetricTile
-          label="Recommendation"
+          label="Confidence"
           value={`${result.recommendation.confidence}/10`}
           detail={result.recommendation.verdict}
         />
         <MetricTile
-          label="Fake risk"
+          label="Fake Risk"
           value={result.fakeReviewDetection.riskLevel}
-          detail={`${result.fakeReviewDetection.suspiciousCount} signal(s)`}
+          detail={`${result.fakeReviewDetection.suspiciousCount} SIGNAL(S)`}
         />
       </div>
 
-      <SentimentBars sentiment={result.sentiment} total={result.reviewCount} />
-
-      <div className="grid gap-4 lg:grid-cols-2">
-        <InsightList title="Pros" items={result.pros} tone="positive" />
-        <InsightList title="Cons" items={result.cons} tone="negative" />
+      <div className="animate-slide-in stagger-4">
+        <SentimentBars sentiment={result.sentiment} total={result.reviewCount} />
       </div>
 
-      <InsightList title="Key insights" items={result.keyInsights} />
-
-      <div className="recommendation-box">
-        <p className="text-sm font-semibold text-ink">Final recommendation</p>
-        <p className="mt-1 text-xl font-semibold">{result.recommendation.verdict}</p>
-        <p className="mt-2 text-ink/70">{result.recommendation.reason}</p>
+      <div className="grid gap-6 lg:grid-cols-2 animate-slide-in stagger-5">
+        <InsightList title="Positives" items={result.pros} tone="positive" />
+        <InsightList title="Negatives" items={result.cons} tone="negative" />
       </div>
 
-      <InsightList title="Suspicious-review notes" items={result.fakeReviewDetection.reasons} />
+      <div className="animate-slide-in stagger-5">
+        <InsightList title="Key Takeaways" items={result.keyInsights} />
+      </div>
+
+      <div className="recommendation-box animate-slide-in stagger-5">
+        <p className="text-lg font-black uppercase tracking-widest text-teal">Final Verdict</p>
+        <p className="mt-4 text-5xl lg:text-7xl font-black uppercase tracking-tighter">{result.recommendation.verdict}</p>
+        <p className="mt-6 text-xl font-bold uppercase leading-relaxed text-ink/80">{result.recommendation.reason}</p>
+      </div>
+
+      <div className="animate-slide-in stagger-5">
+        <InsightList title="Suspicious Signals" items={result.fakeReviewDetection.reasons} tone="negative" />
+      </div>
     </section>
   );
 }
 
 function MetricTile({ label, value, detail }) {
   return (
-    <div className="metric-tile">
-      <p className="text-sm text-ink/60">{label}</p>
-      <p className="mt-2 text-2xl font-semibold">{value}</p>
-      <p className="mt-1 min-h-5 text-sm text-ink/70">{detail}</p>
+    <div className="metric-tile flex flex-col justify-between">
+      <p className="text-sm font-black uppercase tracking-widest text-ink/60">{label}</p>
+      <p className="mt-6 text-6xl lg:text-7xl font-black tracking-tighter">{value}</p>
+      <p className="mt-4 text-lg font-bold uppercase tracking-wider">{detail}</p>
     </div>
   );
 }
 
 function SentimentBars({ sentiment, total }) {
   const items = [
-    { label: "Positive", value: sentiment.positive, className: "bg-leaf" },
-    { label: "Neutral", value: sentiment.neutral, className: "bg-honey" },
-    { label: "Negative", value: sentiment.negative, className: "bg-coral" }
+    { label: "POSITIVE", value: sentiment.positive, className: "bg-leaf" },
+    { label: "NEUTRAL", value: sentiment.neutral, className: "bg-honey" },
+    { label: "NEGATIVE", value: sentiment.negative, className: "bg-coral" }
   ];
 
   return (
     <div className="sentiment-box">
-      <p className="text-sm font-semibold text-ink">Sentiment split</p>
-      <div className="mt-3 space-y-3">
+      <p className="text-lg font-black uppercase tracking-widest text-ink">Sentiment Distribution</p>
+      <div className="mt-6 space-y-4">
         {items.map((item) => (
-          <div key={item.label} className="grid grid-cols-[86px_minmax(0,1fr)_36px] items-center gap-3 text-sm">
-            <span className="text-ink/70">{item.label}</span>
+          <div key={item.label} className="grid grid-cols-[100px_minmax(0,1fr)_50px] items-center gap-4 text-base font-bold">
+            <span className="text-ink/60">{item.label}</span>
             <div className="bar-track">
               <span
                 className={`bar-fill ${item.className}`}
-                style={{ width: `${Math.max((item.value / Math.max(total, 1)) * 100, item.value ? 6 : 0)}%` }}
+                style={{ width: `${Math.max((item.value / Math.max(total, 1)) * 100, item.value ? 5 : 0)}%` }}
               />
             </div>
-            <span className="text-right font-semibold">{item.value}</span>
+            <span className="text-right text-xl font-black">{item.value}</span>
           </div>
         ))}
       </div>
@@ -349,17 +347,17 @@ function InsightList({ title, items, tone }) {
 
   return (
     <div className="insight-list">
-      <h3 className="text-sm font-semibold uppercase text-ink/65">{title}</h3>
-      <ul className="mt-3 space-y-2">
+      <h3 className="text-xl font-black uppercase tracking-widest text-ink">{title}</h3>
+      <ul className="mt-6 space-y-4">
         {items?.length ? (
           items.map((item) => (
-            <li className="flex gap-2 text-sm leading-6 text-ink/80" key={item}>
+            <li className="flex items-start gap-4 text-lg font-medium leading-relaxed text-ink/90" key={item}>
               <span className={markerClass} />
               <span>{item}</span>
             </li>
           ))
         ) : (
-          <li className="text-sm text-ink/55">No strong recurring theme found.</li>
+          <li className="text-lg font-bold text-ink/40 uppercase">NO DATA DETECTED.</li>
         )}
       </ul>
     </div>
@@ -369,15 +367,12 @@ function InsightList({ title, items, tone }) {
 function HistoryPanel({ records, activeId, loadingId, onOpen }) {
   return (
     <section className="history-panel">
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <p className="eyebrow">History</p>
-          <h2 className="mt-1 text-xl font-semibold">Recent analyses</h2>
-        </div>
-        <span className="rounded-md border border-line px-2 py-1 text-sm text-ink/60">{records.length}</span>
+      <div className="flex items-center justify-between gap-4 border-b-4 border-line pb-4">
+        <h2 className="text-2xl font-black uppercase tracking-tighter">History</h2>
+        <span className="border-4 border-line bg-paper px-3 py-1 text-base font-black">{records.length}</span>
       </div>
 
-      <div className="mt-4 grid gap-3">
+      <div className="mt-6 grid gap-4">
         {records.length ? (
           records.map((record) => (
             <button
@@ -386,22 +381,23 @@ function HistoryPanel({ records, activeId, loadingId, onOpen }) {
               type="button"
               onClick={() => onOpen(record.id)}
             >
-              <span className="font-semibold">{record.productName}</span>
-              <span className="text-sm text-ink/60">
+              <span className="text-lg font-black uppercase truncate block w-full">{record.productName}</span>
+              <span className="text-sm font-bold text-ink/60 uppercase tracking-widest mt-1 block">
                 {loadingId === record.id
-                  ? "Loading..."
-                  : `${record.reviewCount} reviews - ${record.recommendation?.verdict || "Analyzed"}`}
+                  ? "LOADING..."
+                  : `${record.reviewCount} REVIEWS / ${record.recommendation?.verdict || "ANALYZED"}`}
               </span>
             </button>
           ))
         ) : (
-          <p className="text-sm text-ink/60">No saved analyses yet. Run one to start the list.</p>
+          <p className="text-base font-bold text-ink/50 uppercase border-dashed border-4 border-line p-6 text-center">NO LOGS AVAILABLE</p>
         )}
       </div>
     </section>
   );
 }
 
+// Helpers
 function splitReviews(text) {
   return text
     .replace(/\r\n/g, "\n")
@@ -463,13 +459,13 @@ function parseCsvRows(text) {
 }
 
 function formatDate(value) {
-  if (!value) return "just now";
+  if (!value) return "JUST NOW";
   return new Intl.DateTimeFormat(undefined, {
     month: "short",
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit"
-  }).format(new Date(value));
+  }).format(new Date(value)).toUpperCase();
 }
 
 function slugify(value) {

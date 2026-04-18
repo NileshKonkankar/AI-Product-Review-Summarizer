@@ -24,6 +24,13 @@ export async function analyzeReviews(req, res, next) {
       reviewsText: req.body.reviewsText
     });
 
+    if (!sourceUrl) {
+      res.status(400).json({
+        message: "Please provide a Source URL."
+      });
+      return;
+    }
+
     if (reviews.length < 2) {
       res.status(400).json({
         message: "Please provide at least two reviews so the analysis has enough signal."

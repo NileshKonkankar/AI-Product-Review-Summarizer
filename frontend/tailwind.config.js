@@ -3,16 +3,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        ink: "#1f2526",
-        paper: "#f7f9fa",
-        line: "#d9e1e3",
-        teal: "#0f8f8c",
-        coral: "#e35d5b",
-        honey: "#e8b931",
-        leaf: "#2e9b65"
+        ink: "#ffffff",
+        paper: "#0a0a0a",
+        line: "#333333",
+        teal: "#ff4500", // Signal Orange
+        coral: "#ff0033", // Harsh Red
+        honey: "#ffaa00", // Alert Yellow
+        leaf: "#ccff00"  // Acid Green
       },
       boxShadow: {
-        panel: "0 18px 45px rgba(31, 37, 38, 0.08)"
+        panel: "4px 4px 0px 0px rgba(255, 69, 0, 1)" // Solid sharp orange shadow
       }
     }
   },
